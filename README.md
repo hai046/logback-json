@@ -5,7 +5,7 @@ logPattern={"project":"${loggerAppName}","timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.S
 ## 修改logback
 重点
 ```
-<encoder class="JsonPatternLayoutEncoder">
+<encoder class="com.hai046.logback.layout.JsonPatternLayoutEncoder">
 ```
 例如
 
