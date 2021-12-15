@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <appender name="STDOUT-APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="com.hai046.logback.layout.JsonPatternLayoutEncoder">
+            <!--            默认已经设置如下-->
+            <!--            <pattern>-->
+            <!--                {"project":"elk-example","timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","log_level":"%level","traceId":"%X{X-B3-TraceId}","spanId":"%X{X-B3-SpanId}","thread":"%thread","location":"%location","%message"}\n-->
+            <!--            </pattern>-->
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="DEFAULT-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/logs/spring/elk-example/default.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/logs/spring/elk-example/default.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder class="com.hai046.logback.layout.JsonPatternLayoutEncoder">
+            <charset>utf8</charset>
+        </encoder>
+
+    </appender>
+
+    <appender name="ERROR-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <file>/logs/spring/elk-example/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/logs/spring/elk-example/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder class="com.hai046.logback.layout.JsonPatternLayoutEncoder">
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="STDERR-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <file>/logs/spring/elk-example/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/logs/spring/elk-example/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder class="com.hai046.logback.layout.JsonPatternLayoutEncoder">
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT-APPENDER"/>
+        <appender-ref ref="STDERR-APPENDER"/>
+        <appender-ref ref="DEFAULT-APPENDER"/>
+        <appender-ref ref="ERROR-APPENDER"/>
+    </root>
+</configuration>
