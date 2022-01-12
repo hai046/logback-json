@@ -57,6 +57,10 @@ public class JsonBuilder {
         return this;
     }
 
+    public Map<String, Object> getMap(){
+        return items;
+    }
+
     /**
      * 订单号
      *
