@@ -28,7 +28,7 @@ import java.util.Map;
 public class JsonBuilder {
     private final Level level;
     private final Logger logger;
-    private final HashMap<String, Object> items = new HashMap<>(4);
+    private final Map<String, Object> items = new HashMap<>(4);
 
 
     public JsonBuilder(Logger logger, Level level) {
@@ -57,11 +57,7 @@ public class JsonBuilder {
         return this;
     }
 
-    /**
-     * 腾讯的一个sdk 必须使用hashmap,哎
-     * @return
-     */
-    public HashMap<String, Object> getMap(){
+    public Map<String, Object> getMap(){
         return items;
     }
 

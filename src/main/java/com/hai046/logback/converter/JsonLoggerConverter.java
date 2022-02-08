@@ -59,24 +59,7 @@ public class JsonLoggerConverter extends LoggerConverter {
     @Override
     public String convert(ILoggingEvent le) {
 
-        String s = convertLocationAndMessage(le);
-
-        String throwMessage = throwableHandlingConverter.convert(le);
-        if (throwMessage != null && !throwMessage.isEmpty()) {
-            try {
-                s = s + String.format(",\"throwable\":%s", JsonObjectMapperUtils.getMapper().writeValueAsString(throwMessage));
-            } catch (JsonProcessingException e) {
-                s = s + String.format(",\"throwable\":\"%s\"", throwMessage);
-            }
-
-        }
-
-
-        return s;
-
-    }
-
-    private String convertLocationAndMessage(ILoggingEvent le) {
+        String s = "";
 
         //这里转换一下断 类名加加上行数
         String location = le.getLoggerName();
@@ -93,7 +76,6 @@ public class JsonLoggerConverter extends LoggerConverter {
             }
         }
 
-
         String message = le.getFormattedMessage();
         //先不管数组了
         if (message.startsWith("{") && message.endsWith("}")) {
@@ -102,19 +84,32 @@ public class JsonLoggerConverter extends LoggerConverter {
             if (length > 4) {
                 //去掉json 前后括号
                 message = message.substring(1, length - 1);
-
-                return String.format("\"location\":\"%s\",\"hostName\":\"%s\",%s", location, HOST_NAME, message);
+                s = String.format("\"location\":\"%s\",\"hostName\":\"%s\",%s", location, HOST_NAME, message);
             }
         } else {
             location = location + ":" + getLineNumber(le, 0);
         }
 
         try {
-            return String.format("\"location\":\"%s\",\"hostName\":\"%s\",\"msg\":%s", location, HOST_NAME, JsonObjectMapperUtils.getMapper().writeValueAsString(message));
+            s = String.format("\"location\":\"%s\",\"hostName\":\"%s\",\"msg\":%s", location, HOST_NAME, JsonObjectMapperUtils.getMapper().writeValueAsString(message));
         } catch (JsonProcessingException e) {
-            return String.format("\"location\":\"%s\",\"hostName\":\"%s\",\"msg\":\"%s\"", location, HOST_NAME, message);
+            s = String.format("\"location\":\"%s\",\"hostName\":\"%s\",\"msg\":\"%s\"", location, HOST_NAME, message);
         }
+
+        String throwMessage = throwableHandlingConverter.convert(le);
+        if (throwMessage != null && !throwMessage.isEmpty()) {
+            try {
+                s = s + String.format(",\"throwable\":%s", JsonObjectMapperUtils.getMapper().writeValueAsString(throwMessage));
+            } catch (JsonProcessingException e) {
+                s = s + String.format(",\"throwable\":\"%s\"", throwMessage);
+            }
+
+        }
+
+        return s;
+
     }
+
 
     private int getLineNumber(ILoggingEvent le, int offsetStackTraceElement) {
         StackTraceElement[] cda = le.getCallerData();
