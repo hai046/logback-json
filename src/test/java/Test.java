@@ -14,6 +14,7 @@ public class Test {
                 .put("agent", 11212)
                 .put("1212", 12).msg("11", "你好", 12)
                 .build();
+        logger.info("\n\n1111111");
         System.exit(0);
     }
 

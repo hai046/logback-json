@@ -75,26 +75,28 @@ public class JsonLoggerConverter extends LoggerConverter {
                 location = sb.toString();
             }
         }
-
-        String message = le.getFormattedMessage();
-        //先不管数组了
-        if (message.startsWith("{") && message.endsWith("}")) {
-            location = location + ":" + getLineNumber(le, 1);
-            final int length = message.length();
-            if (length > 4) {
-                //去掉json 前后括号
-                message = message.substring(1, length - 1);
-                s = String.format("\"location\":\"%s\",\"hostName\":\"%s\",%s", location, HOST_NAME, message);
+        do {
+            String message = le.getFormattedMessage();
+            //先不管数组了
+            if (message.startsWith("{") && message.endsWith("}")) {
+                location = location + ":" + getLineNumber(le, 1);
+                final int length = message.length();
+                if (length > 4) {
+                    //去掉json 前后括号
+                    message = message.substring(1, length - 1);
+                    s = String.format("\"location\":\"%s\",\"hostName\":\"%s\",%s", location, HOST_NAME, message);
+                    break;
+                }
+            } else {
+                location = location + ":" + getLineNumber(le, 0);
             }
-        } else {
-            location = location + ":" + getLineNumber(le, 0);
-        }
 
-        try {
-            s = String.format("\"location\":\"%s\",\"hostName\":\"%s\",\"msg\":%s", location, HOST_NAME, JsonObjectMapperUtils.getMapper().writeValueAsString(message));
-        } catch (JsonProcessingException e) {
-            s = String.format("\"location\":\"%s\",\"hostName\":\"%s\",\"msg\":\"%s\"", location, HOST_NAME, message);
-        }
+            try {
+                s = String.format("\"location\":\"%s\",\"hostName\":\"%s\",\"msg\":%s", location, HOST_NAME, JsonObjectMapperUtils.getMapper().writeValueAsString(message));
+            } catch (JsonProcessingException e) {
+                s = String.format("\"location\":\"%s\",\"hostName\":\"%s\",\"msg\":\"%s\"", location, HOST_NAME, message);
+            }
+        } while (false);
 
         String throwMessage = throwableHandlingConverter.convert(le);
         if (throwMessage != null && !throwMessage.isEmpty()) {

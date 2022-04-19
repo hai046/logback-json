@@ -4,9 +4,9 @@
     <appender name="STDOUT-APPENDER" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="com.hai046.logback.layout.JsonPatternLayoutEncoder">
             <!--            默认已经设置如下-->
-            <!--            <pattern>-->
-            <!--                {"project":"elk-example","timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","log_level":"%level","traceId":"%X{X-B3-TraceId}","spanId":"%X{X-B3-SpanId}","thread":"%thread","location":"%location","%message"}\n-->
-            <!--            </pattern>-->
+                        <pattern>
+                            {"project":"${app.id}","timestamp":"%esTimestamp","log_level":"%level","traceId":"%X{X-B3-TraceId}","spanId":"%X{X-B3-SpanId}","thread":"%thread",%jsonMsg}
+                        </pattern>
             <charset>utf8</charset>
         </encoder>
     </appender>
